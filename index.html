@@ -1,0 +1,448 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ustozlar uchun taklifnoma</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, #243b55 0%, #101827 45%, #05080e 100%);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: .7;
+      animation: twinkle 3s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% {
+        opacity: .2;
+        transform: scale(.7);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.5);
+      }
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      width: min(900px, 100%);
+      min-height: 650px;
+      padding: 55px;
+      position: relative;
+      text-align: center;
+      border: 1px solid rgba(212, 175, 55, .45);
+      border-radius: 30px;
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(20px);
+      box-shadow:
+        0 30px 100px rgba(0,0,0,.5),
+        inset 0 0 40px rgba(255,255,255,.03);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: #d4af37;
+      filter: blur(150px);
+      opacity: .12;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .top-line {
+      color: #d4af37;
+      letter-spacing: 5px;
+      font-size: 14px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    .icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+      animation: float 3s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%,100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    h1 {
+      font-size: clamp(38px, 7vw, 72px);
+      color: #f5d77a;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      color: #d8d8d8;
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 650px;
+      margin: auto;
+    }
+
+    .names {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 40px 0;
+    }
+
+    .name-btn {
+      padding: 14px 27px;
+      border-radius: 50px;
+      border: 1px solid rgba(212,175,55,.5);
+      background: rgba(255,255,255,.06);
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: .35s;
+    }
+
+    .name-btn:hover,
+    .name-btn.active {
+      background: #d4af37;
+      color: #111;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(212,175,55,.25);
+    }
+
+    .invitation {
+      max-width: 700px;
+      margin: auto;
+      padding: 35px 25px;
+      border-top: 1px solid rgba(212,175,55,.35);
+      border-bottom: 1px solid rgba(212,175,55,.35);
+    }
+
+    .invitation h2 {
+      color: #f5d77a;
+      font-size: 32px;
+      margin-bottom: 18px;
+    }
+
+    .invitation p {
+      color: #ddd;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .date {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .info {
+      padding: 15px 25px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .info strong {
+      display: block;
+      color: #f5d77a;
+      margin-bottom: 5px;
+    }
+
+    .open-btn {
+      margin-top: 35px;
+      padding: 17px 40px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #f5d77a, #b8860b);
+      color: #111;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 10px 35px rgba(212,175,55,.25);
+      transition: .3s;
+    }
+
+    .open-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 45px rgba(212,175,55,.4);
+    }
+
+    .message {
+      margin-top: 25px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: .8s;
+    }
+
+    .message.show {
+      opacity: 1;
+      max-height: 300px;
+    }
+
+    .message span {
+      color: #f5d77a;
+      font-size: 25px;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #999;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 35px 20px;
+        border-radius: 22px;
+      }
+
+      .subtitle,
+      .invitation p {
+        font-size: 16px;
+      }
+
+      .invitation h2 {
+        font-size: 26px;
+      }
+
+      .name-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stars" id="stars"></div>
+
+  <main class="container">
+    <section class="card">
+
+      <div class="top-line">
+        Teacher's Day • 1 October
+      </div>
+
+      <div class="icon">🎓</div>
+
+      <h1>Aziz Ustozim</h1>
+
+      <p class="subtitle">
+        Sizga bo‘lgan hurmatimiz va minnatdorchiligimiz
+        ramzi sifatida ushbu kichik taklifnomani taqdim etamiz.
+      </p>
+
+      <div class="names">
+        <button class="name-btn active" onclick="selectTeacher('Nafisa', this)">
+          Nafisa Ustoz
+        </button>
+
+      
+      </div>
+
+      <div class="invitation">
+
+        <h2 id="teacherName">
+          Hurmatli Nafisa ustozim!
+        </h2>
+
+        <p>
+          Sizni 1-oktabr — O‘qituvchi va murabbiylar kuni
+          munosabati bilan tashkil etiladigan bayram
+          tadbirimizga chin qalbimizdan taklif qilamiz.
+        </p>
+
+        <div class="date">
+
+          <div class="info">
+            <strong>📅 Sana</strong>
+            1-oktabr, 2026
+          </div>
+
+          <div class="info">
+            <strong>🎉 Tadbir</strong>
+            Ustozlar kuni
+          </div>
+
+        </div>
+
+        <button class="open-btn" onclick="openInvitation()">
+          💌 Taklifnomani ochish
+        </button>
+
+        <div class="message" id="message">
+          <span>🌷</span>
+          <p>
+            Sizga mustahkam sog‘lik, oilaviy baxt,
+            ijodiy muvaffaqiyat va shogirdlaringiz
+            yutuqlaridan cheksiz quvonch tilaymiz!
+          </p>
+          <br>
+          <span>Bayramingiz muborak bo‘lsin! ❤️</span>
+        </div>
+
+      </div>
+
+      <div class="footer">
+        Hurmat bilan, Abdunabi
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+
+    const teachers = {
+      Abdunabi: "Hurmatli Abdunabi ustoz!",
+      Ilyos: "Hurmatli Ilyos ustoz!",
+      Ustoz: "Hurmatli ustoz!"
+    };
+
+    function selectTeacher(name, button) {
+
+      document.getElementById("teacherName").textContent =
+        teachers[name];
+
+      document.querySelectorAll(".name-btn")
+        .forEach(btn => btn.classList.remove("active"));
+
+      button.classList.add("active");
+
+      document.getElementById("message")
+        .classList.remove("show");
+    }
+
+    function openInvitation() {
+
+      document.getElementById("message")
+        .classList.add("show");
+
+      createConfetti();
+    }
+
+    function createConfetti() {
+
+      for (let i = 0; i < 80; i++) {
+
+        const confetti = document.createElement("div");
+
+        confetti.style.position = "fixed";
+        confetti.style.width = "8px";
+        confetti.style.height = "8px";
+        confetti.style.background =
+          ["#d4af37", "#f5d77a", "#fff", "#9c7c18"]
+          [Math.floor(Math.random() * 4)];
+
+        confetti.style.left =
+          Math.random() * 100 + "vw";
+
+        confetti.style.top = "-10px";
+
+        confetti.style.zIndex = "9999";
+
+        confetti.style.transform =
+          `rotate(${Math.random() * 360}deg)`;
+
+        document.body.appendChild(confetti);
+
+        const duration =
+          2000 + Math.random() * 2500;
+
+        confetti.animate(
+          [
+            {
+              transform:
+                `translateY(0) rotate(0deg)`
+            },
+            {
+              transform:
+                `translateY(110vh) rotate(720deg)`
+            }
+          ],
+          {
+            duration: duration,
+            easing: "cubic-bezier(.2,.8,.3,1)"
+          }
+        );
+
+        setTimeout(() => {
+          confetti.remove();
+        }, duration);
+      }
+    }
+
+    // Yulduzlarni yaratish
+
+    for (let i = 0; i < 80; i++) {
+
+      const star = document.createElement("div");
+
+      star.className = "star";
+
+      star.style.left =
+        Math.random() * 100 + "%";
+
+      star.style.top =
+        Math.random() * 100 + "%";
+
+      star.style.animationDelay =
+        Math.random() * 3 + "s";
+
+      document.getElementById("stars")
+        .appendChild(star);
+    }
+
+  </script>
+
+</body>
+</html>
+```
